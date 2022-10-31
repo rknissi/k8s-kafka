@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sr-ingress-test
+  namespace: "kafka-namespace"
+  labels:
+    app: schema-registry-main
+spec:
+  podSelector:
+    matchLabels:
+      app: schema-registry-main
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: "test-namespace"
+      podSelector:
+        matchLabels:
+          app: test
+          app.kubernetes.io/name: testapp
+    ports:
+      - protocol: TCP
+        port: 8085
